@@ -146,6 +146,3 @@ frame:RegisterEvent("BAG_OPEN")
 frame:RegisterEvent("BAG_CLOSED")
 frame:RegisterEvent("BAG_UPDATE")
 frame:SetScript("OnEvent", OnEvent)
-
--- Addon initialization message
-print("BagValueTracker addon loaded!")

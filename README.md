@@ -7,4 +7,5 @@ BagValueTracker is an intuitive addon designed to enhance your World of Warcraft
 - Real-time Item Valuation: Instantly view the estimated value of items in your bags.
 - Lightweight and Efficient: Optimized for minimal impact on game performance, ensuring a smooth gaming experience.
 - User-Friendly Interface: Easy to navigate and simple to use, even for beginners.
+- Bag availability used/total
 

@@ -1,7 +1,7 @@
 -- Load the configuration file
 if not BagValueTrackerConfig then
     BagValueTrackerConfig = {
-        enableBagValue = { true, true, true, true, true, true }, -- Default to enabling bag value display (disable for the first bag)
+        enableBagValue = { false, true, true, true, true, true }, -- Default to enabling bag value display (disable for the first bag)
     }
 end
 

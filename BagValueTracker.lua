@@ -98,9 +98,9 @@ local function UpdateBagValues(bagID)
     end
 end
 
--- Function to update the slots overlay for closed bags
--- Function to update the slots overlay for closed bags
+-- Function to update the slots overlay for bags
 local function UpdateBagSlotOverlays()
+    -- Update inventory bags
     for bagID = 0, NUM_BAG_SLOTS do
         local bagIcon = _G["CharacterBag" .. (bagID - 1) .. "Slot"]
         if bagIcon then
@@ -124,6 +124,34 @@ local function UpdateBagSlotOverlays()
             bagSlotTexts[bagID]:SetTextColor(1, 1, 1)
         end
     end
+
+    -- Update bank bags
+    if BankFrame:IsShown() then
+        for bagID = NUM_BAG_SLOTS + 1, NUM_BAG_SLOTS + NUM_BANKBAGSLOTS do
+            local bankBagID = bagID - NUM_BAG_SLOTS
+            local bagIcon = _G["BankFrameBag" .. bankBagID]
+            if bagIcon then
+                local usedSlots = 0
+                local totalSlots = C_Container.GetContainerNumSlots(bagID)
+
+                if totalSlots and totalSlots > 0 then
+                    for slotID = 1, totalSlots do
+                        local itemInfo = C_Container.GetContainerItemInfo(bagID, slotID)
+                        if itemInfo and itemInfo.itemID then
+                            usedSlots = usedSlots + 1
+                        end
+                    end
+                end
+
+                if not bagSlotTexts[bagID] then
+                    bagSlotTexts[bagID] = bagIcon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+                    bagSlotTexts[bagID]:SetPoint("TOP", bagIcon, "TOP", 0, 15) -- Adjust vertical offset for spacing
+                end
+                bagSlotTexts[bagID]:SetText(string.format("%d/%d", usedSlots, totalSlots))
+                bagSlotTexts[bagID]:SetTextColor(1, 1, 1)
+            end
+        end
+    end
 end
 
 -- Event handler function
@@ -137,6 +165,10 @@ local function OnEvent(self, event, bagID)
         UpdateBagSlotOverlays()
     elseif event == "PLAYER_LOGIN" then
         UpdateBagSlotOverlays()
+    elseif event == "BANKFRAME_OPENED" then
+        UpdateBagSlotOverlays()
+    elseif event == "BANKFRAME_CLOSED" then
+        UpdateBagSlotOverlays()
     end
 end
 
@@ -145,4 +177,6 @@ frame:RegisterEvent("PLAYER_LOGIN")
 frame:RegisterEvent("BAG_OPEN")
 frame:RegisterEvent("BAG_CLOSED")
 frame:RegisterEvent("BAG_UPDATE")
+frame:RegisterEvent("BANKFRAME_OPENED")
+frame:RegisterEvent("BANKFRAME_CLOSED")
 frame:SetScript("OnEvent", OnEvent)

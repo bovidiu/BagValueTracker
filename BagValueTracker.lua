@@ -99,7 +99,6 @@ local function UpdateBagValues(bagID)
 end
 
 -- Function to update the slots overlay for closed bags
--- Function to update the slots overlay for closed bags
 local function UpdateBagSlotOverlays()
     for bagID = 0, NUM_BAG_SLOTS do
         local bagIcon = _G["CharacterBag" .. (bagID - 1) .. "Slot"]
@@ -118,9 +117,10 @@ local function UpdateBagSlotOverlays()
 
             if not bagSlotTexts[bagID] then
                 bagSlotTexts[bagID] = bagIcon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-                bagSlotTexts[bagID]:SetPoint("TOP", bagIcon, "TOP", 0, 15) -- Adjust vertical offset for spacing
+                bagSlotTexts[bagID]:SetPoint("TOP", bagIcon, "TOP", -1, 15) -- Adjust vertical offset for spacing
             end
-            bagSlotTexts[bagID]:SetText(string.format("%d/%d", usedSlots, totalSlots))
+            local bagAvail = totalSlots - usedSlots
+            bagSlotTexts[bagID]:SetText(string.format("%d", bagAvail))
             bagSlotTexts[bagID]:SetTextColor(1, 1, 1)
         end
     end

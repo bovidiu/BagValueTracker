@@ -1,6 +1,6 @@
-## Interface: 110005, 110007
+## Interface: 40401, 110005, 110007
 ## Title: Bag Value Tracker
-## Notes: Shows the sell value to vendor of items in each bag
+## Notes: Shows the sell value to vendor of items in each bag and their availability
 ## Author: Marksmanuk
 ## Version: 1.0
 ## DefaultState: enabled

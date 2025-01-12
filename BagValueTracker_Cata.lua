@@ -1,7 +1,7 @@
 -- Load the configuration file
 if not BagValueTrackerConfig then
     BagValueTrackerConfig = {
-        enableBagValue = { false, true, true, true, true, true }, -- Default to enabling bag value display (disable for the first bag)
+        enableBagValue = { true, true, true, true, true }, -- Default to enabling bag value display (disable for the first bag)
     }
 end
 
@@ -117,7 +117,7 @@ local function UpdateBagSlotOverlays()
 
             if not bagSlotTexts[bagID] then
                 bagSlotTexts[bagID] = bagIcon:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-                bagSlotTexts[bagID]:SetPoint("TOP", bagIcon, "TOP", -1, 15) -- Adjust vertical offset for spacing
+                bagSlotTexts[bagID]:SetPoint("TOP", bagIcon, "TOP", 1, -17) -- Adjust vertical offset for spacing
             end
             local bagAvail = totalSlots - usedSlots
             bagSlotTexts[bagID]:SetText(string.format("%d", bagAvail))

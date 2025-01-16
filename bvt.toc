@@ -1,4 +1,5 @@
-## Interface: 40401
+## Interface: 110005, 110007
+## Interface-Cataclysm: 40401
 ## Title: Bag Value Tracker
 ## Notes: Shows the sell value to vendor of items in each bag
 ## Author: Marksmanuk
@@ -11,4 +12,10 @@
 ## X-Curse-Project-ID: 1133227
 ## X-Wago-ID: kGr0en6y
 
+BagValueTracker_Retail.lua
+# Core Files
+bvt.lua
+
+# Version-Specific Files
+BagValueTracker_Retail.lua
 BagValueTracker_Cata.lua

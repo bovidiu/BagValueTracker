@@ -12,4 +12,6 @@
 ## X-Curse-Project-ID: 1133227
 ## X-Wago-ID: kGr0en6y
 
+functions\formatCurrency.lua
+
 BagValueTracker.lua

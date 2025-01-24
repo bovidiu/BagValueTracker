@@ -12,4 +12,3 @@
 ## X-Wago-ID: kGr0en6y
 
 BagValueTracker.lua
-BagValueTracker_Cata.lua

@@ -1,4 +1,4 @@
-## Interface: 40401
+## Interface: 40402
 ## Title: Bag Value Tracker
 ## Notes: Shows the sell value to vendor of items in each bag
 ## Author: Marksmanuk

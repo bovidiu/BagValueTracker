@@ -11,4 +11,8 @@
 ## X-Curse-Project-ID: 1133227
 ## X-Wago-ID: kGr0en6y
 
+inc\currency.lua
+inc\itemValue.lua
+inc\bagValues.lua
+
 BagValueTracker_Cata.lua

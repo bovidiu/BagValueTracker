@@ -7,6 +7,7 @@
 ## X-License: All Rights Reserved
 ## X-Category: Bags & Inventory
 ## IconTexture: Interface/AddOns/BagValueTracker/icon
+## OptionalDeps: Auctionator
 
 ## X-Curse-Project-ID: 1133227
 ## X-Wago-ID: kGr0en6y

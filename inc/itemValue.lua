@@ -1,16 +1,29 @@
 ItemValue = {}
 
--- Function to get vendor value for an item
+-- Function to get Auctionator price
+ItemValue.getAuctionatorPrice = function(itemLink)
+    if not Auctionator or not Auctionator.API.v1 then
+        return nil
+    end
+
+    local price = Auctionator.API.v1.GetAuctionPriceByItemLink("BagValueTracker", itemLink)
+    return price
+end
+
+-- Function to get item value (auction or vendor fallback)
 ItemValue.get = function(itemLink)
-    local vendorValue = 0 -- Initialize vendor value
+    local vendorValue = 0 -- default
 
     if itemLink then
-        -- Get item ID from the item link
         local itemID = GetItemInfoInstant(itemLink)
+        local auctionPrice = ItemValue.getAuctionatorPrice(itemLink)
 
-        -- Calculate vendor value (if available)
-        local itemPrice = select(11, GetItemInfo(itemID)) -- This gets the vendor sell price
-        if itemPrice then
+        -- Get vendor price using GetItemInfo
+        local itemPrice = select(11, GetItemInfo(itemLink)) or 0
+
+        if auctionPrice then
+            vendorValue = auctionPrice
+        else
             vendorValue = itemPrice
         end
     end

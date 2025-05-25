@@ -39,6 +39,23 @@ local function UpdateBagSlotOverlays()
     end
 end
 
+local function bindBagsToOpenAll() 
+     -- Initialize saved variables if not already present
+    if not BagValueTrackerDB then
+        BagValueTrackerDB = {}
+    end
+
+    -- Only bind B key on first install
+    if not BagValueTrackerDB.bindingSet then
+        SetBinding("B", "OPENALLBAGS")
+        SaveBindings(GetCurrentBindingSet()) -- Save to appropriate binding set (account or character)
+        BagValueTrackerDB.bindingSet = true
+
+        print("BagValueTracker: 'B' key has been bound to open all bags.")
+    end
+
+end
+
 -- Event handler function
 local function OnEvent(self, event, bagID)
     if event == "BAG_OPEN" then
@@ -50,8 +67,11 @@ local function OnEvent(self, event, bagID)
         UpdateBagSlotOverlays()
     elseif event == "PLAYER_LOGIN" then
         UpdateBagSlotOverlays()
+        bindBagsToOpenAll()
     end
 end
+
+
 
 -- Register events for the frame
 frame:RegisterEvent("PLAYER_LOGIN")

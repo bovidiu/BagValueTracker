@@ -7,6 +7,7 @@
 ## X-License: All Rights Reserved
 ## X-Category: Bags & Inventory
 ## IconTexture: Interface/AddOns/BagValueTracker/icon
+## SavedVariables: BagValueTrackerDB
 
 ## X-Curse-Project-ID: 1133227
 ## X-Wago-ID: kGr0en6y
@@ -14,5 +15,6 @@
 inc\currency.lua
 inc\itemValue.lua
 inc\bagValues.lua
+bindings\Bindings.xml
 
 BagValueTracker_Cata.lua

@@ -1,4 +1,4 @@
-## Interface: 110007, 110100, 110105
+## Interface: 110105, 110107
 ## Title: Bag Value Tracker
 ## Notes: Shows the sell value to vendor of items in each bag
 ## Author: Marksmanuk

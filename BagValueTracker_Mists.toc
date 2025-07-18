@@ -1,0 +1,20 @@
+## Interface: 50500
+## Title: Bag Value Tracker
+## Notes: Shows the sell value to vendor of items in each bag
+## Author: Marksmanuk
+## Version: 1.0
+## DefaultState: enabled
+## X-License: All Rights Reserved
+## X-Category: Bags & Inventory
+## IconTexture: Interface/AddOns/BagValueTracker/icon
+## SavedVariables: BagValueTrackerDB
+## OptionalDeps: Auctionator
+
+## X-Curse-Project-ID: 1133227
+## X-Wago-ID: kGr0en6y
+
+inc\currency.lua
+inc\itemValue.lua
+inc\bagValues.lua
+
+BagValueTracker_Mists.lua

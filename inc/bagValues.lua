@@ -7,12 +7,12 @@ local bagValueTexts = {}
 BagValue.update = function(bagID)
     local totalVendorValue = 0
 
-    local numSlots = C_Container.GetContainerNumSlots(bagID)
+    local numSlots = C_Container.BagCompat.GetContainerNumSlots(bagID)
     if numSlots and numSlots > 0 then
         for slotID = 1, numSlots do
             local itemLink = C_Container.GetContainerItemLink(bagID, slotID)
             if itemLink then
-                local itemInfo = C_Container.GetContainerItemInfo(bagID, slotID)
+                local itemInfo = C_Container.BagCompat.GetContainerItemInfo(bagID, slotID)
                 local itemCount = itemInfo and itemInfo.stackCount or 1 -- Safely get the count of the item
 
                 -- Get the vendor value and multiply it by the count

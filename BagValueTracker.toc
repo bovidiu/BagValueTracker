@@ -8,14 +8,16 @@
 ## X-Category: Bags & Inventory
 ## IconTexture: Interface/AddOns/BagValueTracker/icon
 ## OptionalDeps: Auctionator
+## SavedVariables: BagValueTrackerDB
+
 
 ## X-Curse-Project-ID: 1133227
 ## X-Wago-ID: kGr0en6y
 
 
-inc\currency.lua
-inc\itemValue.lua
-inc\bagValues.lua
-
-
 BagValueTracker.lua
+inc/bagCompat.lua
+inc/config.lua
+inc/itemValue.lua
+inc/currency.lua
+inc/bagValues.lua

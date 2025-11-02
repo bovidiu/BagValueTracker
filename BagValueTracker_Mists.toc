@@ -16,5 +16,6 @@
 inc\currency.lua
 inc\itemValue.lua
 inc\bagValues.lua
+inc\mop\trashHighlighter.lua
 
 BagValueTracker_Mists.lua

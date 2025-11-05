@@ -1,4 +1,4 @@
-## Interface: 50501, 50500
+## Interface: 50502, 50501, 50500
 ## Title: Bag Value Tracker
 ## Notes: Shows the sell value to vendor of items in each bag
 ## Author: Marksmanuk

@@ -24,6 +24,26 @@ local function IsCombinedBags()
     return GetCVarBool("combinedBags")
 end
 
+-- Helper: Format copper into gold/silver/copper string
+local function FormatMoney(copper)
+    local gold = math.floor(copper / 10000)
+    local silver = math.floor((copper % 10000) / 100)
+    local copper = copper % 100
+    return string.format("%dg %ds %dc", gold, silver, copper)
+end
+
+-- Returns true if at least one bag frame is visible
+local function AreBagsOpen()
+    for i = 1, NUM_CONTAINER_FRAMES do
+        local frame = _G["ContainerFrame"..i]
+        if frame and frame:IsShown() then
+            return true, frame
+        end
+    end
+    return false, nil
+end
+
+
 -- Count total free slots across all bags
 local function GetTotalFreeSlots()
     local used, total = 0, 0
@@ -56,21 +76,30 @@ end
 local function UpdateCombinedOverlay()
     HideAllOverlays()
 
-    local free = GetTotalFreeSlots()
-
-    local parent = MainMenuBarBackpackButton
-    if not parent then return end
-
-    if not bagSlotTexts.combined then
-        bagSlotTexts.combined =
-            parent:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
-        bagSlotTexts.combined:SetPoint("TOP", parent, "TOP", 0, 15)
+    if not ContainerFrameCombinedBags or not ContainerFrameCombinedBags:IsShown() then
+        return
     end
 
-    bagSlotTexts.combined:SetText(free)
+    local free = GetTotalFreeSlots()
+    local totalValue = 0
+    if BagValue and BagValue.getTotal then
+        totalValue = BagValue.getTotal() or 0
+    end
+
+    -- Use TOPRIGHT anchor, slightly above bag contents
+    if not bagSlotTexts.combined then
+        bagSlotTexts.combined = ContainerFrameCombinedBags:CreateFontString(nil, "OVERLAY", "GameFontHighlightLarge")
+        -- Position inside the frame, above contents
+        bagSlotTexts.combined:SetPoint("TOPRIGHT", ContainerFrameCombinedBags, "TOPRIGHT", -40, -40)
+    end
+    print(FormatMoney(totalValue))
+    bagSlotTexts.combined:SetText(string.format("Slots: %d   %s", free, FormatMoney(totalValue)))
     bagSlotTexts.combined:SetTextColor(1, 1, 1)
     bagSlotTexts.combined:Show()
 end
+
+
+
 
 
 -- --------------------------------------------
@@ -134,6 +163,9 @@ local function OnEvent(self, event, bagID)
 
     elseif event == "PLAYER_LOGIN" then
         UpdateBagSlotOverlays()
+    elseif event == "BAG_UPDATE_DELAYED" then
+        UpdateBagSlotOverlays()
+
     end
 end
 

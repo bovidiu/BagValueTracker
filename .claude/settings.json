@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Edit(**)",
+      "Write(**)",
+      "Bash(git status*)",
+      "Bash(git log*)",
+      "Bash(git diff*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git checkout*)",
+      "Bash(git branch*)",
+      "Bash(mkdir*)",
+      "Bash(ln -s*)",
+      "Bash(ls*)",
+      "Bash(rm -rf /Users/ovidiubokar/.claude/projects/-Users-ovidiubokar-projects-bkr-BagValueTracker/memory)"
+    ]
+  }
+}

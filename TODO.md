@@ -2,12 +2,14 @@
 
 ## Bugs
 
-- **`itemValue.lua:18`** — `GetItemInfoInstant(itemLink)` result assigned to `itemID` but never used (dead code)
-- **Retail `.toc` missing `SavedVariables`** — `BagValueTrackerConfig` is never persisted in Retail, resets to defaults on every login (Cata/MoP have `SavedVariables: BagValueTrackerDB` but not the config table)
-- **`GetItemInfo` is deprecated since 10.2.6** — should migrate to `C_Item.GetItemInfo(itemLink)`. Also returns `nil` if item not cached yet (async), which means `sellPrice` silently falls back to 0 for uncached items
-- **`GetItemInfoInstant` is deprecated since 10.2.6** — modern replacement is `C_Item.GetItemInfoInstant`
-- **`hasNoValue` field ignored** — `C_Container.GetContainerItemInfo` returns a `hasNoValue` boolean we could use to skip items with no vendor value instead of relying on `GetItemInfo` returning 0
-- **`C_Container.GetContainerItemInfo` already returns `hyperlink`** — `bagValues.lua` makes a separate `GetContainerItemLink` call per slot, but the same link is already in `itemInfo.hyperlink` from the prior `GetContainerItemInfo` call (double API call per slot)
+- ~~**[Retail] Combined bags mode not supported**~~ ✓ fixed — `updateCombined()` in `bagValues.lua` targets `ContainerFrameCombinedBags`; `BagValue.update` routes there when `combinedBags` CVar is "1"
+- ~~**[Retail] After disabling combined bags, bag value stops showing**~~ ✓ fixed — `USE_COMBINED_BAGS_CHANGED` event now calls `BagValue.reset()` to clear stale FontString cache
+
+- ~~**`itemValue.lua:18`** — dead code~~ ✓ removed
+- ~~**Retail `.toc` missing `SavedVariables`**~~ ✓ fixed — added `BagValueTrackerConfig` to all three `.toc` files
+- ~~**`GetItemInfo` / `GetItemInfoInstant` deprecated**~~ ✓ fixed — `itemValue.lua` now uses `(C_Item and C_Item.GetItemInfo) or GetItemInfo` compat shim; works on Cata/MoP and Retail
+- ~~**`hasNoValue` field ignored**~~ ✓ fixed — `bagValues.lua` now guards with `not itemInfo.hasNoValue`
+- ~~**Redundant `GetContainerItemLink` call**~~ ✓ fixed — `bagValues.lua` now uses `itemInfo.hyperlink` directly
 
 ## Ideas / Improvements
 

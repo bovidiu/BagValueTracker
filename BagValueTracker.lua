@@ -50,6 +50,8 @@ local function OnEvent(self, event, bagID)
         UpdateBagSlotOverlays()
     elseif event == "PLAYER_LOGIN" then
         UpdateBagSlotOverlays()
+    elseif event == "USE_COMBINED_BAGS_CHANGED" then
+        BagValue.reset()
     end
 end
 
@@ -58,4 +60,5 @@ frame:RegisterEvent("PLAYER_LOGIN")
 frame:RegisterEvent("BAG_OPEN")
 frame:RegisterEvent("BAG_CLOSED")
 frame:RegisterEvent("BAG_UPDATE")
+frame:RegisterEvent("USE_COMBINED_BAGS_CHANGED")
 frame:SetScript("OnEvent", OnEvent)

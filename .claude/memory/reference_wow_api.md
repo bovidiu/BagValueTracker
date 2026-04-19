@@ -74,6 +74,13 @@ Returns a table (nil if slot empty):
 
 ---
 
+## Combined Bags (Retail only, since 10.0.0)
+
+- CVar: `C_CVar.GetCVar("combinedBags")` → "0" or "1"
+- When enabled, all bags render in `ContainerFrameCombinedBags` instead of `ContainerFrame1–5`
+- Event: `USE_COMBINED_BAGS_CHANGED` → payload: `useCombinedBags` (boolean), fires when the user toggles the setting
+- Must register this event and swap rendering logic between combined (one frame, total value) and individual (per-bag frames) modes
+
 ## Deprecation summary (as of 10.2.6)
 
 | Old | New |

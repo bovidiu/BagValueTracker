@@ -19,10 +19,13 @@ ItemValue.get = function(itemLink)
         return 0, false
     end
 
-    -- Prefer the auction price when Auctionator can supply one.
-    local auctionPrice = ItemValue.getAuctionatorPrice(itemLink)
-    if auctionPrice then
-        return auctionPrice, false
+    -- Prefer the auction price when Auctionator can supply one, unless the
+    -- player has turned that off.
+    if not BagValueTrackerConfig or BagValueTrackerConfig.useAuctionPrice ~= false then
+        local auctionPrice = ItemValue.getAuctionatorPrice(itemLink)
+        if auctionPrice then
+            return auctionPrice, false
+        end
     end
 
     -- Fall back to the vendor sell price (field 11 of GetItemInfo).

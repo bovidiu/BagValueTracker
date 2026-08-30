@@ -103,6 +103,10 @@ local function refreshAllBags()
     end
 end
 
+-- Re-run every bag's value display (used by the options panel when a setting
+-- changes).
+BagValue.refreshAll = refreshAllBags
+
 refreshFrame:RegisterEvent("GET_ITEM_INFO_RECEIVED")
 refreshFrame:SetScript("OnEvent", function()
     if refreshQueued then

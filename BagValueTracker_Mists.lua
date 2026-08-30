@@ -1,9 +1,5 @@
--- Load the configuration file
-if not BagValueTrackerConfig then
-    BagValueTrackerConfig = {
-        enableBagValue = { true, true, true, true, true }, -- Default to enabling bag value display (disable for the first bag)
-    }
-end
+-- BagValueTrackerConfig (a SavedVariable) is initialised in inc/config.lua once
+-- ADDON_LOADED fires.
 
 -- Create a frame to handle events
 local frame = CreateFrame("Frame")

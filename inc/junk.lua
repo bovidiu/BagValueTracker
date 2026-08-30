@@ -65,8 +65,33 @@ end
 -- Merchant button ------------------------------------------------------------
 
 local button = CreateFrame("Button", "BagValueTrackerSellJunkButton", MerchantFrame, "UIPanelButtonTemplate")
-button:SetSize(112, 22)
-button:SetPoint("BOTTOMLEFT", MerchantFrame, "BOTTOMLEFT", 18, 33)
+button:SetHeight(44)
+-- Attach outside the right edge of the merchant window, near the top - clear of
+-- the repair buttons, the money frame and the Merchant/Buyback tabs.
+button:SetPoint("TOPLEFT", MerchantFrame, "TOPRIGHT", 2, -24)
+
+-- Two-line label ("Sell Junk" over the value); the template's own single-line
+-- font string is not used.
+local templateText = button:GetFontString()
+if templateText then
+    templateText:SetText("")
+    templateText:Hide()
+end
+
+local titleLine = button:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+titleLine:SetPoint("TOP", button, "TOP", 0, -10)
+titleLine:SetText("Sell Junk")
+
+local valueLine = button:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+valueLine:SetPoint("TOP", titleLine, "BOTTOM", 0, -2)
+
+local MIN_WIDTH = 106
+local SIDE_PADDING = 36 -- border art + 5px breathing room each side
+
+local function fitButtonWidth()
+    local widest = math.max(titleLine:GetStringWidth(), valueLine:GetStringWidth())
+    button:SetWidth(math.max(MIN_WIDTH, math.ceil(widest) + SIDE_PADDING))
+end
 
 local function updateButton()
     if not BagValueTrackerConfig or not BagValueTrackerConfig.sellJunkButton then
@@ -79,13 +104,19 @@ local function updateButton()
     button.junkItems = items
     button.junkTotal = total
 
-    if #items == 0 then
-        button:SetText("No Junk")
-        button:Disable()
-    else
-        button:SetText("Sell Junk  " .. GetCoinTextureString(total))
+    local hasJunk = #items > 0
+    valueLine:SetText(hasJunk and GetCoinTextureString(total) or "nothing to sell")
+    if hasJunk then
         button:Enable()
+        titleLine:SetTextColor(NORMAL_FONT_COLOR:GetRGB())
+        valueLine:SetTextColor(HIGHLIGHT_FONT_COLOR:GetRGB())
+    else
+        button:Disable()
+        titleLine:SetTextColor(DISABLED_FONT_COLOR:GetRGB())
+        valueLine:SetTextColor(DISABLED_FONT_COLOR:GetRGB())
     end
+
+    fitButtonWidth()
 end
 Junk.updateButton = updateButton
 

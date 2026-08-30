@@ -1,22 +1,6 @@
-# Packaging config for the BigWigs packager (CurseForge / Wago / WoWInterface).
-# https://github.com/BigWigsMods/packager
-#
-# One project, three flavors. The packager discovers the TOC files and reads
-# each ## Interface line to decide which game versions the upload targets:
-#   BagValueTracker.toc        -> Retail  (Mainline)
-#   BagValueTracker_Cata.toc   -> Cataclysm Classic
-#   BagValueTracker_Mists.toc  -> Mists of Pandaria Classic
-
 package-as: BagValueTracker
 
-# No embedded libraries, so no nolib variant is needed.
-enable-nolib-creation: no
-
-# Repo-only files that must not ship inside the addon zip.
 ignore:
-  - ".github"
-  - ".vs"
-  - ".gitignore"
-  - "*.md"
-  - "LICENSE"
-  - "icon.png"        # GitHub readme art; the client uses icon.blp
+  - README.md
+  - LICENSE
+  - icon.png

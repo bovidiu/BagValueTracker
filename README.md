@@ -23,6 +23,7 @@ BagValueTracker is an intuitive addon designed to enhance your World of Warcraft
 
 1. Install the addon (and, optionally, [Auctionator](https://www.curseforge.com/wow/addons/auctionator) for auction-based pricing) and log in.
 2. Open your bags. Each enabled bag shows its total sell value in the top-right corner.
+   - With Retail's **Combine All Bags** turned on, a single combined total is shown at the bottom-left of the merged bag window (the Reagent Bag keeps its own).
    - A trailing `...` means the game is still loading item data; the total finishes filling in after a moment.
 3. Hover any item to see its **Sell value** on the tooltip. Hovering a stack also shows the value of the whole stack.
 4. **Selling junk:** open any merchant and click the **Sell Junk** button (bottom-left of the merchant window). It shows how much your grey items are worth, sells them all in one click, and reports the gold earned in chat. Hover the button first to see exactly what will be sold. Prefer it fully automatic? Turn on *Sell junk automatically at merchants* in the options.
@@ -54,6 +55,7 @@ BagValueTracker is an intuitive addon designed to enhance your World of Warcraft
 - **New:** net-worth tracking. `/bvt worth` prints your bag value + gold, the change this session, and the change since your last session.
 - **New:** a per-character value history, saved at each login and logout (last 60 snapshots). Can be turned off with *Track net worth history*.
 - **New:** optional *Report net worth at login* setting.
+- **Fixed (Retail):** with **Combine All Bags** enabled the per-bag values were drawn on hidden frames and never appeared. A single combined total is now shown at the bottom-left of the merged bag window.
 
 ### 1.3
 

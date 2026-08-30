@@ -13,6 +13,7 @@ BagValueTracker is an intuitive addon designed to enhance your World of Warcraft
 - **Cataclysm & Mists** - open all bags by pressing **B**.
 - **Per-bag value** - each open bag shows the total sell value of its contents, based on the auction price* (falling back to the vendor price).
 - **Tooltip value** - item tooltips show the sell value per item and for the whole stack.
+- **Sell junk** - a "Sell Junk" button on the merchant window that vendors all your grey items, with an optional auto-sell.
 - **Options panel** - open with `/bvt` (or `/bagvalue`), or from the game's AddOns settings.
 - **Lightweight and Efficient** - optimised for minimal impact on game performance.
 - Supported: Retail, Cataclysm Classic, Mists of Pandaria Classic.
@@ -23,14 +24,24 @@ BagValueTracker is an intuitive addon designed to enhance your World of Warcraft
 2. Open your bags. Each enabled bag shows its total sell value in the top-right corner.
    - A trailing `...` means the game is still loading item data; the total finishes filling in after a moment.
 3. Hover any item to see its **Sell value** on the tooltip. Hovering a stack also shows the value of the whole stack.
-4. Type `/bvt` (or `/bagvalue`), or go to **Game Menu -> Options -> AddOns -> Bag Value Tracker**, to change:
+4. **Selling junk:** open any merchant and click the **Sell Junk** button (bottom-left of the merchant window). It shows how much your grey items are worth, sells them all in one click, and reports the gold earned in chat. Hover the button first to see exactly what will be sold. Prefer it fully automatic? Turn on *Sell junk automatically at merchants* in the options.
+5. Type `/bvt` (or `/bagvalue`), or go to **Game Menu -> Options -> AddOns -> Bag Value Tracker**, to change:
    - **Show item value on tooltips** - turn the tooltip line on or off.
    - **Use auction price when available** - when on, prices come from Auctionator's auction data (vendor price is used as a fallback); when off, only the vendor price is used.
+   - **Show "Sell Junk" button at merchants** - show or hide the merchant button.
+   - **Sell junk automatically at merchants** - vendor all grey items the moment any merchant window opens.
    - **Show value for:** - a checkbox per bag (Backpack, Bag 1-4, Reagent Bag) to hide the value on bags you don't care about.
 
    Changes apply immediately and are saved per character.
 
+> **Note:** "junk" means poor-quality (grey) items that have a sell price. The vendor's buyback tab only holds the last few sold items, so anything beyond that cannot be bought back.
+
 ## Changelog
+
+### 1.3
+
+- **New:** "Sell Junk" button on the merchant window. It shows the total value of your grey items, sells them all with one click, and reports the gold earned. Hovering the button lists what will be sold.
+- **New:** optional *Sell junk automatically at merchants* setting that vendors grey items whenever a merchant window opens.
 
 ### 1.2
 
@@ -47,7 +58,7 @@ BagValueTracker is an intuitive addon designed to enhance your World of Warcraft
 
 ## Upcoming features
 
-- **Junk value & one-click sell:** highlight vendor trash, show its total, and sell it from the merchant window.
+- **Junk value in bags:** see the grey-item total in your bags at any time, not just at a merchant, plus a "keep" list for greys you want to protect.
 - **Session & net-worth tracking:** see how much your bag value changed this session and over time.
 - **Bank & warband bank valuation.**
 

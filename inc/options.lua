@@ -14,6 +14,9 @@ local function refreshDisplays()
     if BagValue and BagValue.refreshAll then
         BagValue.refreshAll()
     end
+    if BagValueTracker.Junk and BagValueTracker.Junk.updateButton then
+        BagValueTracker.Junk.updateButton()
+    end
 end
 
 -- Build the panel ---------------------------------------------------------------
@@ -80,6 +83,29 @@ addCheckbox(
     16, y,
     function() return BagValueTrackerConfig.useAuctionPrice end,
     function(v) BagValueTrackerConfig.useAuctionPrice = v end
+)
+y = y - 40
+
+local junkHeader = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+junkHeader:SetPoint("TOPLEFT", 16, y)
+junkHeader:SetText("Junk selling")
+y = y - 26
+
+addCheckbox(
+    "Show \"Sell Junk\" button at merchants",
+    "Adds a button to the merchant window that vendors every grey item in your bags.",
+    16, y,
+    function() return BagValueTrackerConfig.sellJunkButton end,
+    function(v) BagValueTrackerConfig.sellJunkButton = v end
+)
+y = y - 30
+
+addCheckbox(
+    "Sell junk automatically at merchants",
+    "Vendor all grey items as soon as you open any merchant window.",
+    16, y,
+    function() return BagValueTrackerConfig.autoSellJunk end,
+    function(v) BagValueTrackerConfig.autoSellJunk = v end
 )
 y = y - 40
 

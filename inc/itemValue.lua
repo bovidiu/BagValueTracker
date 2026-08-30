@@ -2,7 +2,7 @@ ItemValue = {}
 
 -- Function to get Auctionator price
 ItemValue.getAuctionatorPrice = function(itemLink)
-    if not Auctionator or not Auctionator.API.v1 then
+    if not Auctionator or not Auctionator.API or not Auctionator.API.v1 then
         return nil
     end
 
@@ -10,23 +10,33 @@ ItemValue.getAuctionatorPrice = function(itemLink)
     return price
 end
 
--- Function to get item value (auction or vendor fallback)
+-- Function to get item value (auction or vendor fallback).
+-- Returns: value (number), pending (boolean)
+--   pending is true when the item is not in the local cache yet, so the value
+--   returned is 0 and the caller's total should be treated as incomplete.
 ItemValue.get = function(itemLink)
-    local vendorValue = 0 -- default
-
-    if itemLink then
-        local itemID = GetItemInfoInstant(itemLink)
-        local auctionPrice = ItemValue.getAuctionatorPrice(itemLink)
-
-        -- Get vendor price using GetItemInfo
-        local itemPrice = select(11, GetItemInfo(itemLink)) or 0
-
-        if auctionPrice then
-            vendorValue = auctionPrice
-        else
-            vendorValue = itemPrice
-        end
+    if not itemLink then
+        return 0, false
     end
 
-    return vendorValue
+    -- Prefer the auction price when Auctionator can supply one.
+    local auctionPrice = ItemValue.getAuctionatorPrice(itemLink)
+    if auctionPrice then
+        return auctionPrice, false
+    end
+
+    -- Fall back to the vendor sell price (field 11 of GetItemInfo).
+    local vendorPrice = select(11, GetItemInfo(itemLink))
+    if vendorPrice == nil then
+        -- Item data has not been cached by the client yet. GetItemInfo above has
+        -- already kicked off a server query; nudge it along where the API exists
+        -- and tell the caller this item could not be valued this pass.
+        local itemID = GetItemInfoInstant(itemLink)
+        if itemID and C_Item and C_Item.RequestLoadItemDataByID then
+            C_Item.RequestLoadItemDataByID(itemID)
+        end
+        return 0, true
+    end
+
+    return vendorPrice, false
 end

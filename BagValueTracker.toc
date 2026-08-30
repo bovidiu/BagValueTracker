@@ -2,7 +2,7 @@
 ## Title: Bag Value Tracker
 ## Notes: Shows the sell value to vendor of items in each bag
 ## Author: Marksmanuk
-## Version: 1.0
+## Version: @project-version@
 ## DefaultState: enabled
 ## X-License: All Rights Reserved
 ## X-Category: Bags & Inventory

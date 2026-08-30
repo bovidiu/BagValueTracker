@@ -1,4 +1,5 @@
-# example 1: on push to master
+# Creates the next semver tag on every merge to main.
+# The pushed tag triggers release.yml, which packages and publishes the addon.
 name: Bump version
 on:
   push:
@@ -18,5 +19,10 @@ jobs:
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@v1 # Don't use @master or @v1 unless you're happy to test the latest version
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # if you don't want to set write permissions use a PAT token
+          # Must be a Personal Access Token (repo scope), NOT the default
+          # GITHUB_TOKEN - a tag pushed with GITHUB_TOKEN will not trigger release.yml.
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}
           WITH_V: true
+          # Bug-fix merges bump the patch digit; put "#minor" or "#major" in a
+          # commit message on the merge to override.
+          DEFAULT_BUMP: patch

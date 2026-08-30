@@ -1,0 +1,6 @@
+# Keep line endings LF in the repo so the Linux packager parses .pkgmeta /
+# .toc / .lua correctly regardless of the OS a contributor commits from.
+* text=auto eol=lf
+
+*.blp binary
+*.png binary

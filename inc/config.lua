@@ -16,6 +16,8 @@ local DEFAULTS = {
     useAuctionPrice = true,   -- prefer Auctionator's auction price over vendor price
     sellJunkButton = true,    -- show the "Sell Junk" button on the merchant window
     autoSellJunk = false,     -- sell grey items automatically when a merchant opens
+    trackNetWorth = true,     -- keep a per-character history of item value + gold
+    reportWorthOnLogin = false, -- print net worth and the change since last logout at login
 }
 
 BagValueTracker.DEFAULTS = DEFAULTS
@@ -56,6 +58,14 @@ loader:SetScript("OnEvent", function(self, _, loadedName)
         BagValueTrackerConfig = {}
     end
     applyDefaults(BagValueTrackerConfig, DEFAULTS)
+
+    -- Per-character net-worth history (see inc/worth.lua).
+    if type(BagValueTrackerCharDB) ~= "table" then
+        BagValueTrackerCharDB = {}
+    end
+    if type(BagValueTrackerCharDB.history) ~= "table" then
+        BagValueTrackerCharDB.history = {}
+    end
 
     for _, callback in ipairs(BagValueTracker.onConfigReady) do
         pcall(callback)

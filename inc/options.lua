@@ -109,6 +109,29 @@ addCheckbox(
 )
 y = y - 40
 
+local worthHeader = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+worthHeader:SetPoint("TOPLEFT", 16, y)
+worthHeader:SetText("Net worth")
+y = y - 26
+
+addCheckbox(
+    "Track net worth history",
+    "Keep a per-character record of your bag value and gold over time. Use /bvt worth to see it.",
+    16, y,
+    function() return BagValueTrackerConfig.trackNetWorth end,
+    function(v) BagValueTrackerConfig.trackNetWorth = v end
+)
+y = y - 30
+
+addCheckbox(
+    "Report net worth at login",
+    "Print your net worth and the change since your last session when you log in.",
+    16, y,
+    function() return BagValueTrackerConfig.reportWorthOnLogin end,
+    function(v) BagValueTrackerConfig.reportWorthOnLogin = v end
+)
+y = y - 40
+
 local bagsHeader = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
 bagsHeader:SetPoint("TOPLEFT", 16, y)
 bagsHeader:SetText("Show value for:")
@@ -169,10 +192,19 @@ end)
 
 SLASH_BAGVALUETRACKER1 = "/bvt"
 SLASH_BAGVALUETRACKER2 = "/bagvalue"
-SlashCmdList.BAGVALUETRACKER = function()
+SlashCmdList.BAGVALUETRACKER = function(msg)
+    local arg = (msg or ""):lower():match("^%s*(%S*)")
+
+    if arg == "worth" or arg == "networth" then
+        if BagValueTracker.Worth then
+            BagValueTracker.Worth.report()
+        end
+        return
+    end
+
     if BagValueTracker.openSettings then
         BagValueTracker.openSettings()
     else
-        print("BagValueTracker: options panel is unavailable on this client.")
+        BagValueTracker.print("options panel is unavailable on this client. Try /bvt worth.")
     end
 end

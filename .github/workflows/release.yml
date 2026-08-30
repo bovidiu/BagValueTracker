@@ -1,0 +1,39 @@
+# Packages the addon and publishes it whenever a version tag is pushed.
+#
+# The tag is created automatically by bump_version.yml on every merge to main.
+# NOTE: that workflow must push the tag with a Personal Access Token (secret
+# RELEASE_PAT) rather than the default GITHUB_TOKEN, otherwise GitHub will not
+# fire this workflow in response to the tag.
+#
+# Required repository secrets:
+#   CF_API_KEY       - CurseForge upload API token   (https://legacy.curseforge.com/account/api-tokens)
+#   WAGO_API_TOKEN   - Wago Addons API token         (https://addons.wago.io/account/apikeys)
+#   WOWI_API_TOKEN   - WoWInterface token (optional, only if you publish there)
+# GITHUB_TOKEN is provided automatically and is used to attach the zip to a GitHub release.
+
+name: Package and release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Package and upload
+        uses: BigWigsMods/packager@v2
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
+          WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

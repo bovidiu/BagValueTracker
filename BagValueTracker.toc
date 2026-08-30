@@ -18,6 +18,7 @@ inc\config.lua
 inc\currency.lua
 inc\itemValue.lua
 inc\bagValues.lua
+inc\junk.lua
 inc\tooltip.lua
 inc\options.lua
 

@@ -14,9 +14,16 @@ local DEFAULTS = {
     enableBagValue = { false, true, true, true, true, true },
     showTooltipValue = true, -- append the sell value to item tooltips
     useAuctionPrice = true,   -- prefer Auctionator's auction price over vendor price
+    sellJunkButton = true,    -- show the "Sell Junk" button on the merchant window
+    autoSellJunk = false,     -- sell grey items automatically when a merchant opens
 }
 
 BagValueTracker.DEFAULTS = DEFAULTS
+
+-- Chat-frame message with the addon's prefix.
+function BagValueTracker.print(message)
+    DEFAULT_CHAT_FRAME:AddMessage("|cff66ccffBag Value Tracker|r: " .. tostring(message))
+end
 
 -- Copy any missing keys from defaults into target, recursing into subtables and
 -- extending arrays, without overwriting values the player has already set.

@@ -50,6 +50,14 @@ local function signedCoin(delta)
     return (delta < 0 and "-" or "+") .. GetCoinTextureString(rounded)
 end
 
+local function lastSessionWorth()
+    local last = BagValueTrackerCharDB and BagValueTrackerCharDB.lastSession
+    if type(last) == "table" then
+        return (last.item or 0) + (last.money or 0)
+    end
+    return nil
+end
+
 -- Print the current net worth and how it has changed.
 function Worth.report()
     local itemValue, money, net = Worth.current()
@@ -60,19 +68,14 @@ function Worth.report()
         BagValueTracker.print(string.format("  this session: %s", signedCoin(net - sessionStartWorth)))
     end
 
-    local history = BagValueTrackerCharDB and BagValueTrackerCharDB.history
-    local previous = history and history[#history]
-    if previous then
-        local was = (previous.item or 0) + (previous.money or 0)
-        BagValueTracker.print(string.format("  since last snapshot: %s", signedCoin(net - was)))
+    local previousWorth = lastSessionWorth()
+    if previousWorth then
+        BagValueTracker.print(string.format("  since last session: %s", signedCoin(net - previousWorth)))
     end
 end
 
--- Append (or refresh) a history sample.
-local function recordSnapshot()
-    if not (BagValueTrackerConfig and BagValueTrackerConfig.trackNetWorth) then
-        return
-    end
+-- Append (or refresh) a history sample, for the future net-worth graph.
+local function appendHistory()
     local db = BagValueTrackerCharDB
     if type(db) ~= "table" then
         return
@@ -94,7 +97,24 @@ local function recordSnapshot()
         table.remove(db.history, 1)
     end
 end
-Worth.recordSnapshot = recordSnapshot
+
+-- Record the end-of-session baseline. Written on logout only, so a /reload
+-- mid-session doesn't move the reference that "since last session" compares to
+-- (beyond the reload itself being a session boundary).
+local function recordLogout()
+    if not (BagValueTrackerConfig and BagValueTrackerConfig.trackNetWorth) then
+        return
+    end
+    local db = BagValueTrackerCharDB
+    if type(db) ~= "table" then
+        return
+    end
+
+    local itemValue, money = Worth.current()
+    db.lastSession = { t = time(), item = itemValue, money = money }
+    appendHistory()
+end
+Worth.recordLogout = recordLogout
 
 -- Wiring -------------------------------------------------------------------
 
@@ -103,26 +123,25 @@ events:RegisterEvent("PLAYER_LOGIN")
 events:RegisterEvent("PLAYER_LOGOUT")
 events:SetScript("OnEvent", function(_, event)
     if event == "PLAYER_LOGOUT" then
-        recordSnapshot()
+        recordLogout()
         return
     end
 
     -- PLAYER_LOGIN: wait a few seconds for the item cache to warm before taking
-    -- the session baseline and the login snapshot.
+    -- the session baseline.
     C_Timer.After(4, function()
         local _, _, net = Worth.current()
         sessionStartWorth = net
 
-        local history = BagValueTrackerCharDB and BagValueTrackerCharDB.history
-        local previous = history and history[#history]
-
-        recordSnapshot()
+        if BagValueTrackerConfig and BagValueTrackerConfig.trackNetWorth then
+            appendHistory()
+        end
 
         if BagValueTrackerConfig and BagValueTrackerConfig.reportWorthOnLogin then
             BagValueTracker.print(string.format("net worth %s", coin(net)))
-            if previous then
-                local was = (previous.item or 0) + (previous.money or 0)
-                BagValueTracker.print(string.format("  since last session: %s", signedCoin(net - was)))
+            local previousWorth = lastSessionWorth()
+            if previousWorth then
+                BagValueTracker.print(string.format("  since last session: %s", signedCoin(net - previousWorth)))
             end
         end
     end)

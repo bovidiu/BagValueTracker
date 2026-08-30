@@ -62,6 +62,91 @@ local function report(verb, count, total)
     end
 end
 
+-- Bag-slot highlight -------------------------------------------------------
+-- While a merchant is open, tint every bag slot that holds an item the Sell
+-- Junk button will vendor. Classic clients only - Retail's bag frames recycle
+-- item buttons aggressively and lack the update hook needed to keep the tints
+-- in sync.
+local ENABLE_SLOT_MARKS = WOW_PROJECT_ID ~= nil
+    and WOW_PROJECT_MAINLINE ~= nil
+    and WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE
+
+local function slotMark(itemButton)
+    if not itemButton.bvtJunkMark then
+        local tex = itemButton:CreateTexture(nil, "OVERLAY")
+        tex:SetColorTexture(1, 0.55, 0.1, 0.25)
+        tex:SetAllPoints(itemButton)
+        itemButton.bvtJunkMark = tex
+    end
+    return itemButton.bvtJunkMark
+end
+
+local function forEachItemButton(fn)
+    -- Individual bag frames.
+    for frameIndex = 1, 13 do
+        local frame = _G["ContainerFrame" .. frameIndex]
+        if frame then
+            for slotIndex = 1, 36 do
+                local itemButton = _G["ContainerFrame" .. frameIndex .. "Item" .. slotIndex]
+                if itemButton then
+                    fn(itemButton)
+                end
+            end
+        end
+    end
+    -- Retail combined-bags frame.
+    local combined = _G.ContainerFrameCombinedBags
+    if combined then
+        local slotIndex = 1
+        while true do
+            local itemButton = _G["ContainerFrameCombinedBagsItem" .. slotIndex]
+            if not itemButton then
+                break
+            end
+            fn(itemButton)
+            slotIndex = slotIndex + 1
+        end
+    end
+end
+
+function Junk.markBags(show)
+    if not ENABLE_SLOT_MARKS then
+        return
+    end
+
+    if show and not (BagValueTrackerConfig and BagValueTrackerConfig.highlightJunkInBags) then
+        show = false -- setting off: fall through and clear any existing tints
+    end
+
+    local junkSet
+    if show then
+        junkSet = {}
+        local items = Junk.scan()
+        for _, entry in ipairs(items) do
+            junkSet[entry.bag .. ":" .. entry.slot] = true
+        end
+    end
+
+    forEachItemButton(function(itemButton)
+        local isJunk = false
+        if junkSet and itemButton:IsShown() then
+            local parent = itemButton:GetParent()
+            local bag = (itemButton.GetBagID and itemButton:GetBagID())
+                or (parent and parent.GetID and parent:GetID())
+            local slot = itemButton.GetID and itemButton:GetID()
+            if bag and slot and junkSet[bag .. ":" .. slot] then
+                isJunk = true
+            end
+        end
+
+        if isJunk then
+            slotMark(itemButton):Show()
+        elseif itemButton.bvtJunkMark then
+            itemButton.bvtJunkMark:Hide()
+        end
+    end)
+end
+
 -- Merchant button ------------------------------------------------------------
 
 local button = CreateFrame("Button", "BagValueTrackerSellJunkButton", MerchantFrame, "UIPanelButtonTemplate")
@@ -117,6 +202,7 @@ local function updateButton()
     end
 
     fitButtonWidth()
+    Junk.markBags(merchantOpen)
 end
 Junk.updateButton = updateButton
 
@@ -153,9 +239,11 @@ local events = CreateFrame("Frame")
 events:RegisterEvent("MERCHANT_SHOW")
 events:RegisterEvent("MERCHANT_CLOSED")
 events:RegisterEvent("BAG_UPDATE")
+events:RegisterEvent("BAG_OPEN")
 events:SetScript("OnEvent", function(_, event)
     if event == "MERCHANT_CLOSED" then
         merchantOpen = false
+        Junk.markBags(false) -- clear the bag-slot tints
         return
     end
 
@@ -168,5 +256,23 @@ events:SetScript("OnEvent", function(_, event)
 
     if merchantOpen then
         updateButton()
+        -- Re-mark shortly after, once any bag frames opening alongside the
+        -- merchant have finished building their item buttons.
+        if ENABLE_SLOT_MARKS then
+            C_Timer.After(0.1, function()
+                if merchantOpen then
+                    Junk.markBags(true)
+                end
+            end)
+        end
     end
 end)
+
+-- Re-apply the tints when the bag UI redraws (sorting, paging, etc.).
+if ENABLE_SLOT_MARKS and type(_G.ContainerFrame_Update) == "function" then
+    hooksecurefunc("ContainerFrame_Update", function()
+        if merchantOpen then
+            Junk.markBags(true)
+        end
+    end)
+end

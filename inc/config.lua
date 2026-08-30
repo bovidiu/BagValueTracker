@@ -16,6 +16,7 @@ local DEFAULTS = {
     useAuctionPrice = true,   -- prefer Auctionator's auction price over vendor price
     sellJunkButton = true,    -- show the "Sell Junk" button on the merchant window
     autoSellJunk = false,     -- sell grey items automatically when a merchant opens
+    highlightJunkInBags = true, -- tint bag slots that will be sold (Cata/Mists only)
     trackNetWorth = true,     -- keep a per-character history of item value + gold
     reportWorthOnLogin = false, -- print net worth and the change since last logout at login
 }

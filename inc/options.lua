@@ -66,7 +66,19 @@ subtitle:SetPoint("RIGHT", panel, "RIGHT", -32, 0)
 subtitle:SetJustifyH("LEFT")
 subtitle:SetText("Show the vendor / auction value of the items in each bag.")
 
-local y = -64
+-- Row spacing kept tight so the whole panel fits the (shorter) Classic settings
+-- canvas without being clipped.
+local ROW = 26      -- between checkboxes in a group
+local GROUP = 34    -- between the last checkbox of a group and the next header
+local HEADER = 22   -- between a header and its first checkbox
+
+local function header(text, atY)
+    local fs = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+    fs:SetPoint("TOPLEFT", 16, atY)
+    fs:SetText(text)
+end
+
+local y = -60
 
 addCheckbox(
     "Show item value on tooltips",
@@ -75,7 +87,7 @@ addCheckbox(
     function() return BagValueTrackerConfig.showTooltipValue end,
     function(v) BagValueTrackerConfig.showTooltipValue = v end
 )
-y = y - 30
+y = y - ROW
 
 addCheckbox(
     "Use auction price when available",
@@ -84,12 +96,10 @@ addCheckbox(
     function() return BagValueTrackerConfig.useAuctionPrice end,
     function(v) BagValueTrackerConfig.useAuctionPrice = v end
 )
-y = y - 40
+y = y - GROUP
 
-local junkHeader = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-junkHeader:SetPoint("TOPLEFT", 16, y)
-junkHeader:SetText("Junk selling")
-y = y - 26
+header("Junk selling", y)
+y = y - HEADER
 
 addCheckbox(
     "Show \"Sell Junk\" button at merchants",
@@ -98,7 +108,7 @@ addCheckbox(
     function() return BagValueTrackerConfig.sellJunkButton end,
     function(v) BagValueTrackerConfig.sellJunkButton = v end
 )
-y = y - 30
+y = y - ROW
 
 addCheckbox(
     "Sell junk automatically at merchants",
@@ -107,12 +117,23 @@ addCheckbox(
     function() return BagValueTrackerConfig.autoSellJunk end,
     function(v) BagValueTrackerConfig.autoSellJunk = v end
 )
-y = y - 40
+y = y - ROW
 
-local worthHeader = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-worthHeader:SetPoint("TOPLEFT", 16, y)
-worthHeader:SetText("Net worth")
-y = y - 26
+-- Bag-slot tinting only runs on the Classic clients, so only offer the toggle there.
+if WOW_PROJECT_ID ~= WOW_PROJECT_MAINLINE then
+    addCheckbox(
+        "Highlight junk in bags at a merchant",
+        "Tint the bag slots the Sell Junk button will vendor.",
+        16, y,
+        function() return BagValueTrackerConfig.highlightJunkInBags end,
+        function(v) BagValueTrackerConfig.highlightJunkInBags = v end
+    )
+    y = y - ROW
+end
+y = y - (GROUP - ROW)
+
+header("Net worth", y)
+y = y - HEADER
 
 addCheckbox(
     "Track net worth history",
@@ -121,7 +142,7 @@ addCheckbox(
     function() return BagValueTrackerConfig.trackNetWorth end,
     function(v) BagValueTrackerConfig.trackNetWorth = v end
 )
-y = y - 30
+y = y - ROW
 
 addCheckbox(
     "Report net worth at login",
@@ -130,28 +151,32 @@ addCheckbox(
     function() return BagValueTrackerConfig.reportWorthOnLogin end,
     function(v) BagValueTrackerConfig.reportWorthOnLogin = v end
 )
-y = y - 40
+y = y - GROUP
 
-local bagsHeader = panel:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-bagsHeader:SetPoint("TOPLEFT", 16, y)
-bagsHeader:SetText("Show value for:")
-y = y - 26
+header("Show value for:", y)
+y = y - HEADER
 
 -- Per-bag toggles are added once the config table exists (see onConfigReady).
+-- Laid out in two columns to save vertical space.
 local function buildBagToggles()
     local list = BagValueTrackerConfig and BagValueTrackerConfig.enableBagValue
     if type(list) ~= "table" then
         return
     end
+    local rowY = y
     for index = 1, #list do
+        local leftColumn = (index % 2 == 1)
         addCheckbox(
             bagLabel(index),
             nil,
-            24, y,
+            leftColumn and 24 or 210,
+            rowY,
             function() return BagValueTrackerConfig.enableBagValue[index] end,
             function(v) BagValueTrackerConfig.enableBagValue[index] = v end
         )
-        y = y - 26
+        if not leftColumn then
+            rowY = rowY - ROW
+        end
     end
 end
 

@@ -5,6 +5,10 @@ BagValueTracker = BagValueTracker or {}
 local Worth = {}
 BagValueTracker.Worth = Worth
 
+-- Retail 12.1.5 moved GetCoinTextureString under C_CurrencyInfo; fall back to
+-- the old global for clients that still expose it (e.g. Classic).
+local GetCoinTextureString = (C_CurrencyInfo and C_CurrencyInfo.GetCoinTextureString) or GetCoinTextureString
+
 local MAX_HISTORY = 60
 local SNAPSHOT_WINDOW = 6 * 3600 -- replace, rather than append, samples closer than this
 

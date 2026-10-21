@@ -1,5 +1,11 @@
 ItemValue = {}
 
+-- Retail 12.1.5 removed the GetItemInfo/GetItemInfoInstant globals in favor of
+-- the C_Item namespace. Fall back to the old globals for clients that still
+-- expose them (e.g. Classic).
+local GetItemInfo = (C_Item and C_Item.GetItemInfo) or GetItemInfo
+local GetItemInfoInstant = (C_Item and C_Item.GetItemInfoInstant) or GetItemInfoInstant
+
 -- Function to get Auctionator price
 ItemValue.getAuctionatorPrice = function(itemLink)
     if not Auctionator or not Auctionator.API or not Auctionator.API.v1 then

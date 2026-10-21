@@ -25,7 +25,7 @@ function Junk.scan()
             local info = C_Container.GetContainerItemInfo(bag, slot)
             if info and info.quality == POOR_QUALITY and not info.hasNoValue and not info.isLocked then
                 local link = C_Container.GetContainerItemLink(bag, slot)
-                local unitPrice = link and select(11, GetItemInfo(link)) or 0
+                local unitPrice = link and select(11, (C_Item and C_Item.GetItemInfo or GetItemInfo)(link)) or 0
                 if unitPrice > 0 then
                     local count = info.stackCount or 1
                     local value = unitPrice * count

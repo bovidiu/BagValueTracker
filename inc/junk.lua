@@ -5,6 +5,10 @@ BagValueTracker = BagValueTracker or {}
 local Junk = {}
 BagValueTracker.Junk = Junk
 
+-- Retail 12.1.5 moved GetCoinTextureString under C_CurrencyInfo; fall back to
+-- the old global for clients that still expose it (e.g. Classic).
+local GetCoinTextureString = (C_CurrencyInfo and C_CurrencyInfo.GetCoinTextureString) or GetCoinTextureString
+
 local POOR_QUALITY = (Enum and Enum.ItemQuality and Enum.ItemQuality.Poor) or 0
 
 -- Set between MERCHANT_SHOW and MERCHANT_CLOSED. Selling is only allowed while a

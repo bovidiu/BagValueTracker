@@ -1,6 +1,19 @@
 ![BagValueTracker WoW addon](https://github.com/bovidiu/BagValueTracker/blob/main/icon.png)
 
-BagValueTracker is an intuitive addon designed to enhance your World of Warcraft gaming experience by providing a clear overview of the value of items in your bags. With a user-friendly interface, this addon enables players to quickly assess the worth of their inventory without the hassle of external tools.
+# BagValueTracker
+
+**See your gold before you sell it.** BagValueTracker is a World of Warcraft addon that shows the vendor and auction-house value of every item in your bags — right on the bag window, in your tooltips, and in a one-click junk seller — so you always know what your inventory is worth without opening an external site or app.
+
+Works on **Retail** (including the Forever client), **Cataclysm Classic**, and **Mists of Pandaria Classic**.
+
+## Why BagValueTracker
+
+- 💰 **Instant bag value** - every open bag shows the total sell value of its contents at a glance.
+- 🏷️ **Tooltip prices** - hover any item to see its sell value and full-stack value.
+- 🗑️ **One-click junk selling** - vendor every grey item at once, or turn on auto-sell and never think about it again.
+- 📈 **Net worth tracking** - `/bvt worth` tracks your bags + gold over time, per character.
+- 🎒 **Bag capacity at a glance** - see free slots without opening your bags.
+- ⚡ **Lightweight** - minimal memory and CPU footprint, no unnecessary polling.
 
 ## Install
 
@@ -17,7 +30,7 @@ BagValueTracker is an intuitive addon designed to enhance your World of Warcraft
 - **Net worth** - `/bvt worth` shows your total bag value plus gold, the change this session, and the change since your last play session. History is saved per character.
 - **Options panel** - open with `/bvt` (or `/bagvalue`), or from the game's AddOns settings.
 - **Lightweight and Efficient** - optimised for minimal impact on game performance.
-- Supported: Retail, Cataclysm Classic, Mists of Pandaria Classic.
+- Supported: Retail (including the Forever client), Cataclysm Classic, Mists of Pandaria Classic.
 
 ## How to use
 
@@ -52,6 +65,10 @@ BagValueTracker is an intuitive addon designed to enhance your World of Warcraft
 > - Net worth currently counts your bags and gold only, not the bank. The value is taken a few seconds after login so item data has time to load.
 
 ## Changelog
+
+### 1.5
+
+- **New:** added support for the Forever client (Interface 16001), which shares Retail's 12.1.5 API.
 
 ### 1.4
 
